@@ -1,7 +1,8 @@
 // 文件操作是同步的
-import { ensureDirSync } from 'fs-extra'
+import { ensureDirSync, writeFileSync } from 'fs-extra'
 import { resolve } from 'path'
 import { lightBlue, lightGreen } from 'kolorist'
+import genCoreTemplate from '../template/core'
 
 export type ComponentMeta = {
   name: string
@@ -23,10 +24,20 @@ export default function createComponent(meta: ComponentMeta) {
   ensureDirSync(styleDir)
   ensureDirSync(testDir)
 
+  // 文件和内容创建
+  // 核心文件：组件文件
+  const coreFilePath = resolve(compSrcDir, name + '.tsx')
+  writeFileSync(coreFilePath, genCoreTemplate(name))
+
+  // 创建成功通知
   console.log(
-    lightGreen(
-      `✔ The component "${name}" directory has been generated successfully.`
-    )
+    lightGreen(`
+      ✔️ 组件${name}目录创建生成
+    `)
   )
-  console.log(lightBlue(`✈ Target directory: ${componentDir}`))
+  console.log(
+    lightBlue(`
+      ✔️ 组件目录：${componentDir}
+    `)
+  )
 }
