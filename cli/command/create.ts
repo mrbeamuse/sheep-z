@@ -1,61 +1,58 @@
-// inquirer只支持cjs，需要用* as inquirer来引入
-import * as inquirer from 'inquirer' //inquirer版本8.2.2写法，只支持cjs
+import * as inquirer from 'inquirer' // inquirer只有cjs格式
 import { red } from 'kolorist'
-// import createComponent from '../shared/create-component'
 
-// 创建类型
+// create type 支持项
 const CREATE_TYPES = ['component', 'lib-entry']
-// 组件分类
-const DOCS_CATEGORIES = ['通用', '导航', '反馈', '数据录入', '数据显示']
+// 文档分类
+const DOCS_CATEGORIES = ['通用', '导航', '反馈', '数据录入', '数据展示', '布局']
 
-export async function onCreate(args = { type: '' }) {
-  // 容错，判断用户是否输入type
-  let { type } = args
-  // 未输入，提示用户重新输入，给用户一个列表去选择
+export async function onCreate(cmd = { type: '' }) {
+  let { type } = cmd
+
+  // 如果没有在命令参数里带入 type 那么就询问一次
   if (!type) {
     const result = await inquirer.prompt([
       {
-        // 获取输入后的属性名
+        // 用于获取后的属性名
         name: 'type',
-        // 交互方式为列表
+        // 交互方式为列表单选
         type: 'list',
         // 提示信息
         message: '（必填）请选择创建类型：',
         // 选项列表
         choices: CREATE_TYPES,
-        // 默认选项
+        // 默认值，这里是索引下标
         default: 0
       }
     ])
+    // 赋值 type
     type = result.type
   }
 
-  // 另一个错误，用户输入了信息，但是输入错误，要求用户重新选择
-  if (!CREATE_TYPES.includes(type)) {
+  // 如果获取的类型不在我们支持范围内，那么输出错误提示并重新选择
+  if (CREATE_TYPES.every(t => type !== t)) {
     console.log(
       red(
         `当前类型仅支持：${CREATE_TYPES.join(
           ', '
-        )}，您输入的是："${type}", 请重新选择！`
+        )}，收到不在支持范围内的 "${type}"，请重新选择！`
       )
     )
-    // 输入错误，重新执行当前函数
     return onCreate()
   }
 
-  // 输入则创建对应的内容
   try {
     switch (type) {
       case 'component':
-        // 如果是组件，我们还需要收集组件信息
+        // 如果是组件，我们还需要收集一些信息
         const info = await inquirer.prompt([
           {
             name: 'name',
             type: 'input',
-            message: '（必填）请输入组件name，将用作文件名和文件夹名称',
-            validate(value: string) {
+            message: '（必填）请输入组件 name ，将用作目录及文件名：',
+            validate: (value: string) => {
               if (value.trim() === '') {
-                return '组件name不能为空！'
+                return '组件 name 是必填项！'
               }
               return true
             }
@@ -63,10 +60,10 @@ export async function onCreate(args = { type: '' }) {
           {
             name: 'title',
             type: 'input',
-            message: '（必填）请输入组件中文名称，将用作文档列表中显示',
-            validate(value: string) {
+            message: '（必填）请输入组件中文名称，将用作文档列表显示：',
+            validate: (value: string) => {
               if (value.trim() === '') {
-                return '组件名称不能为空！'
+                return '组件名称是必填项！'
               }
               return true
             }
@@ -74,21 +71,31 @@ export async function onCreate(args = { type: '' }) {
           {
             name: 'category',
             type: 'list',
-            message: '（必填）请选择组件分类，将用作文档列表分类中',
+            message: '（必填）请选择组件分类，将用作文档列表分类：',
             choices: DOCS_CATEGORIES,
             default: 0
           }
         ])
-        // 创建组件模板文件
+
         createComponent(info)
         break
-
+      case 'lib-entry':
+        createLibEntry()
+        break
       default:
         break
     }
-  } catch (error) {}
+  } catch (e) {
+    console.log(red('✖') + e.toString())
+    process.exit(1)
+  }
 }
 
 function createComponent(info) {
-  console.log('info ', info)
+  // 输出收集到的组件信息
+  console.log(info)
+}
+
+function createLibEntry() {
+  console.log('create lib-entry file.')
 }
