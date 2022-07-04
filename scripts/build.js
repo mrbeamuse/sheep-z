@@ -36,7 +36,7 @@ const createPackageJson = name => {
   // 根据传入name决定包名、主文件和主模块名称
   const fileStr = `{
     "name": "${name ? name : 'sheep-z'}",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "main": "${name ? 'index.umd.js' : 'sheep-z.umd.js'}",
     "module": "${name ? 'index.es.js' : 'sheep-z.es.js'}",
     "author": "Mr.beam",
