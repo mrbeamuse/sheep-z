@@ -1,5 +1,6 @@
 import * as inquirer from 'inquirer' // inquirer只有cjs格式
 import { red } from 'kolorist'
+import createComponent from '../shared/create-component'
 
 // create type 支持项
 const CREATE_TYPES = ['component', 'lib-entry']
@@ -91,10 +92,10 @@ export async function onCreate(cmd = { type: '' }) {
   }
 }
 
-function createComponent(info) {
-  // 输出收集到的组件信息
-  console.log(info)
-}
+// function createComponent(info) {
+//   // 输出收集到的组件信息
+//   console.log(info)
+// }
 
 function createLibEntry() {
   console.log('create lib-entry file.')
