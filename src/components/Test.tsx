@@ -22,8 +22,8 @@ export default defineComponent({
       const span = true ? <span>A</span> : <span>B</span>
       return (
         <div onClick={withModifiers(inc, ['self'])}>
-          点我 {count.value}
-          <input v-focus type="text" v-model={count.value} />
+          点我{count.value}
+          {/* <input v-focus type="text" v-model={count.value} /> */}
           {span}
           <ul>
             {list.value.map(item => (
