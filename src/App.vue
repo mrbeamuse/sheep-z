@@ -14,6 +14,10 @@ const onClick = value => {
     <template #default></template>
     <template #title> title </template>
   </Test>
+  <s-button type="primary" size="large">确定</s-button>
+  <s-button type="primary" size="medium">确定</s-button>
+  <s-button type="primary" disabled>Disabled</s-button>
+  <s-button block>Cancel</s-button>
 </template>
 
 <style>

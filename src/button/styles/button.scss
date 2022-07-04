@@ -1,0 +1,56 @@
+@use './button-config';
+@import './button-base';
+
+
+.s-btn {
+ // 导入button基础样式
+ @include button-base;
+
+ // 导入type相关的样式
+ @include button-variant(button-config.$type);
+ 
+ // 导入hover等伪类样式
+ @include button-variant(button-config.$pseudo, true);
+ 
+  // 主要按钮
+  &.s-btn--primary {
+    color: $s-light-text;
+    background-color: $s-primary;
+
+    &:hover,
+    &:focus {
+      background-color: $s-primary-hover;
+    }
+
+    &:active {
+      // background-color: $s-2primary-active;
+    }
+  }
+
+  // 次要按钮
+  &.s-btn--secondary {
+    color: $s-text;
+    background-color: $s-block;
+    border-color: $s-line;
+
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: $s-form-control-line-active;
+      color: $s-brand-active;
+    }
+  }
+
+  // 文字按钮
+  &.s-btn--text {
+    padding: 0;
+    color: $s-brand-active;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: $s-brand-active-focus;
+    }
+  }
+}
+
