@@ -3,6 +3,10 @@ import { ensureDirSync, writeFileSync } from 'fs-extra'
 import { resolve } from 'path'
 import { lightBlue, lightGreen } from 'kolorist'
 import genCoreTemplate from '../template/core'
+import genTypesTemplate from '../template/types'
+import { genStyleTemplate } from '../template/style'
+import genTestTemplate from '../template/test'
+import genIndexTemplate from '../template'
 
 export type ComponentMeta = {
   name: string
@@ -28,6 +32,23 @@ export default function createComponent(meta: ComponentMeta) {
   // 核心文件：组件文件
   const coreFilePath = resolve(compSrcDir, name + '.tsx')
   writeFileSync(coreFilePath, genCoreTemplate(name))
+
+  // 核心文件：组件类型文件
+  const typesFilePath = resolve(compSrcDir, name + '-type.ts')
+  writeFileSync(typesFilePath, genTypesTemplate(name))
+
+  // 核心文件：组件样式文件
+  // 样式文件
+  const styleFilePath = styleDir + `/${meta.name}.scss`
+  writeFileSync(styleFilePath, genStyleTemplate(meta.name))
+
+  // 核心文件：测试文件
+  const testFilePath = testDir + `/${meta.name}.test.ts`
+  writeFileSync(testFilePath, genTestTemplate(meta.name))
+
+  // 组件索引文件
+  const indexFilePath = componentDir + `/index.ts`
+  writeFileSync(indexFilePath, genIndexTemplate(meta.name))
 
   // 创建成功通知
   console.log(
